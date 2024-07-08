@@ -1,0 +1,37 @@
+import yfinance as yf
+portfolio = {}
+def add_stock(symbol, shares):
+    stock = yf.Ticker(symbol)
+    price = stock.info['regularMarketPrice']
+    portfolio[symbol] = {'shares': shares, 'price': price}
+    print(f'Added {shares} shares of {symbol} to the portfolio')
+def remove_stock(symbol):
+    if symbol in portfolio:
+        del portfolio[symbol]
+        print(f'Removed {symbol} from the portfolio')
+    else:
+        print(f'{symbol} is not in the portfolio')
+def track_portfolio():
+    total_value = 0
+    for symbol, info in portfolio.items():
+        stock = yf.Ticker(symbol)
+        price = stock.info['regularMarketPrice']
+        value = info['shares'] * price
+        total_value += value
+        print(f'{symbol}: {info["shares"]} shares at {price} = {value}')
+    print(f'Total portfolio value: {total_value}')
+while True:
+    action = input('What do you want to do? (add, remove, track, quit): ')
+    if action == 'add':
+        symbol = input('Enter the stock symbol: ')
+        shares = int(input('Enter the number of shares: '))
+        add_stock(symbol, shares)
+    elif action == 'remove':
+        symbol = input('Enter the stock symbol: ')
+        remove_stock(symbol)
+    elif action == 'track':
+        track_portfolio()
+    elif action == 'quit':
+        break
+    else:
+        print('Invalid action')
